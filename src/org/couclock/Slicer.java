@@ -1,14 +1,13 @@
 package org.couclock;
 
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.Iterator;
 import java.util.List;
 
 public class Slicer {
 
-	public static List<BitSet> slicer(List<List<String>> pizza, int rows, int cols, int min, int max) {
-		List<BitSet> slices = new ArrayList<>();
+	public static List<int[]> slicer(List<List<String>> pizza, int rows, int cols, int min, int max) {
+		List<int[]> slices = new ArrayList<>();
 
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
@@ -25,8 +24,9 @@ public class Slicer {
 
 						// System.out.println("Slice : " + i + " " + j + " " + (i + width) + " " + (j +
 						// height));
-						// int[] slice = { rows, cols, i, i + width, j, j + height };
-						BitSet slice = BitUtils.getSliceBitSet(rows, cols, i, i + width, j, j + height);
+						int[] slice = { rows, cols, i, i + width, j, j + height };
+						// BitSet slice = BitUtils.getSliceBitSet(rows, cols, i, i + width, j, j +
+						// height);
 						// System.out.println("BitSet : " + slice);
 						slices.add(slice);
 						// System.out.println("Taille : " + ((width + 1) * (height + 1)));

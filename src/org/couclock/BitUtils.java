@@ -19,6 +19,11 @@ public class BitUtils {
 		return result;
 	}
 
+	public static BitSet getSliceBitSet(int[] slice) {
+
+		return getSliceBitSet(slice[0], slice[1], slice[2], slice[3], slice[4], slice[5]);
+	}
+
 	public static String getSliceCoordinate(BitSet slice, int rows, int cols) {
 
 		int first = slice.nextSetBit(0);
@@ -39,13 +44,13 @@ public class BitUtils {
 		return minRow + " " + minCol + " " + maxRow + " " + maxCol;
 	}
 
-	public static BitSet getUnion(List<BitSet> list) {
+	public static BitSet getUnion(List<int[]> list) {
 
 		BitSet union = new BitSet();
 
 		for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-			BitSet bitSet = (BitSet) iterator.next();
-			union.or(bitSet);
+			int[] bitSet = (int[]) iterator.next();
+			union.or(getSliceBitSet(bitSet[0], bitSet[1], bitSet[2], bitSet[3], bitSet[4], bitSet[5]));
 		}
 
 		return union;

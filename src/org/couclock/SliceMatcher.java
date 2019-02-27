@@ -11,7 +11,7 @@ public class SliceMatcher {
 	private static int currentMax = 0;
 	private static HashMap<BitSet, List<BitSet>> cache = new HashMap<>();
 
-	public static List<BitSet> getBestSlices(List<BitSet> remainingSlices) {
+	public static List<BitSet> getBestSlices(List<int[]> remainingSlices) {
 
 		BitSet union = BitUtils.getUnion(remainingSlices);
 		if (cache.containsKey(union)) {
@@ -24,20 +24,21 @@ public class SliceMatcher {
 
 		int localMax = 0;
 
-		for (BitSet oneSelectedSlice : remainingSlices) {
+		for (int[] oneSelectedSlice : remainingSlices) {
 			List<BitSet> selected = new ArrayList<>();
-			selected.add(oneSelectedSlice);
-			List<BitSet> newRemaining = new ArrayList<>(remainingSlices);
+			BitSet oneSelectedSliceBS = BitUtils.getSliceBitSet(oneSelectedSlice);
+			selected.add(oneSelectedSliceBS);
+			List<int[]> newRemaining = new ArrayList<>(remainingSlices);
 			newRemaining.remove(oneSelectedSlice);
 			for (Iterator iterator = remainingSlices.iterator(); iterator.hasNext();) {
-				BitSet bitSet = (BitSet) iterator.next();
-				if (bitSet.intersects(oneSelectedSlice)) {
+				int[] bitSet = (int[]) iterator.next();
+				if (BitUtils.getSliceBitSet(bitSet).intersects(oneSelectedSliceBS)) {
 					newRemaining.remove(bitSet);
 				}
 			}
 
 			BitSet newUnion = BitUtils.getUnion(newRemaining);
-			if ((oneSelectedSlice.cardinality() + newUnion.cardinality()) < union.cardinality()) {
+			if ((oneSelectedSliceBS.cardinality() + newUnion.cardinality()) < union.cardinality()) {
 				// System.out.println("Optim ?");
 				continue;
 			}
