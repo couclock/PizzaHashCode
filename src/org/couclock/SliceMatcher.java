@@ -11,11 +11,23 @@ public class SliceMatcher {
 	private static int currentMax = 0;
 	private static HashMap<BitSet, List<BitSet>> cache = new HashMap<>();
 
-	public static List<BitSet> getBestSlices(List<int[]> remainingSlices) {
+	public static List<BitSet> getBestSlices(int currentScore, List<int[]> remainingSlices) {
+
+		if (remainingSlices.isEmpty()) {
+			System.err.println("End");
+
+			return new ArrayList<>();
+		}
 
 		BitSet union = BitUtils.getUnion(remainingSlices);
+
+		if (currentScore + union.cardinality() < currentMax) {
+			System.err.println("Skip");
+			return null;
+		}
+
 		if (cache.containsKey(union)) {
-			// System.out.println("Using cache " + union);
+			System.err.println("Using cache ");
 
 			return cache.get(union);
 		}
@@ -43,12 +55,18 @@ public class SliceMatcher {
 				continue;
 			}
 
-			List<BitSet> bestSlices = getBestSlices(newRemaining);
+			List<BitSet> bestSlices = getBestSlices(currentScore + oneSelectedSliceBS.cardinality(), newRemaining);
+			if (bestSlices == null) {
+				continue;
+			}
 			selected.addAll(bestSlices);
-			int currentScore = BitUtils.sumCardinality(selected);
-			if (currentScore > localMax) {
+			int localScore = BitUtils.sumCardinality(selected);
+			if (localScore > localMax) {
 				localMax = currentScore;
 				bestChoice = selected;
+				if (currentScore + localMax > currentMax) {
+					currentMax = currentScore + localMax;
+				}
 				// System.out.println("New Best : " + localMax + " : " + bestChoice);
 			}
 			if (localMax == union.cardinality()) {

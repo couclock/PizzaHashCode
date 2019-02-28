@@ -44,7 +44,7 @@ public class PizzaApp {
 		List<int[]> slices = Slicer.slicer(pizza, R, C, L, H);
 		System.out.println("slices count : " + slices.size());
 
-		List<BitSet> selectedSlices = SliceMatcher.getBestSlices(slices);
+		List<BitSet> selectedSlices = SliceMatcher.getBestSlices(0, slices);
 
 		System.out.println(selectedSlices);
 
